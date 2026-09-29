@@ -1,0 +1,1351 @@
+{
+  "benchmark_name": "siggraph_rag_evaluation_50q",
+  "total_queries": 50,
+  "queries": [
+    {
+      "query_id": "rag_001",
+      "question_number": 1,
+      "query_text": "How many building models were used to evaluate the low-poly mesh generation method?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "The evaluation dataset contains 100 building models with varying styles."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_002",
+        "3528233.3530716_chunk_048"
+      ],
+      "expected_retrieval": [
+        "100 building models"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "117–125",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_002",
+      "question_number": 2,
+      "query_text": "What are the three stages of the proposed low-poly mesh generation algorithm?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "1. Generate a watertight visual hull using Boolean intersection of 3D extrusions of input silhouettes. 2. Carve redundant structures from the visual hull using Boolean subtraction. 3. Progressively simplify the carved mesh and extract a Pareto front."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_002",
+        "3528233.3530716_chunk_009"
+      ],
+      "expected_retrieval": [
+        "visual hull",
+        "Boolean subtraction",
+        "carving",
+        "simplification",
+        "Pareto front"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "25–33",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_003",
+      "question_number": 3,
+      "query_text": "What two temporal coherence losses are proposed for portrait line-drawing animation?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "The paper proposes: (1) a temporal coherence loss based on warping, and (2) a temporal coherence loss based on a temporal coherence discriminator."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_009",
+        "3528233.3530720_chunk_010",
+        "3528233.3530720_chunk_032"
+      ],
+      "expected_retrieval": [
+        "temporal coherence loss based on warping",
+        "temporal coherence loss based on a temporal coherence discriminator"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "47–51",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_004",
+      "question_number": 4,
+      "query_text": "What three metrics are used for quantitative evaluation of the portrait animation method?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "1. FID for individual-frame quality and similarity between generated and real distributions. 2. Inter-frame SSIM for temporal/inter-frame coherence. 3. Lip Landmark Distance (LMD) for lip synchronization."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_036",
+        "3528233.3530720_chunk_045"
+      ],
+      "expected_retrieval": [
+        "FID",
+        "Inter-frame SSIM",
+        "Lip Landmark Distance",
+        "LMD"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "689–693",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_005",
+      "question_number": 5,
+      "query_text": "How many video clips were used for the quantitative evaluation of the portrait animation method?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "The authors evaluated the methods on 118 video clips from the VoxCeleb2 dataset."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_040",
+        "3528233.3530720_chunk_045"
+      ],
+      "expected_retrieval": [
+        "118 video clips",
+        "VoxCeleb2"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "689–693",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_006",
+      "question_number": 6,
+      "query_text": "What FID score does the proposed portrait animation method achieve?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "The proposed method, Ours, achieves an FID of 135.2."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_036",
+        "3528233.3530720_chunk_037"
+      ],
+      "expected_retrieval": [
+        "FID of 135.2",
+        "135.2"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "595–600",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_007",
+      "question_number": 7,
+      "query_text": "How many subjects was MoRF trained on according to the paper's stated limitation?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "MoRF was trained on 15 subjects."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530753_chunk_048"
+      ],
+      "expected_retrieval": [
+        "15 subjects"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "639–647",
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_008",
+      "question_number": 8,
+      "query_text": "What does each identity receive in MoRF's shared volumetric model?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "exact_fact",
+      "category": "Exact Fact",
+      "difficulty": "easy",
+      "expected_answers": [
+        "Each identity is represented by a latent code."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530753_chunk_010",
+        "3528233.3530753_chunk_026",
+        "3528233.3530753_chunk_037"
+      ],
+      "expected_retrieval": [
+        "latent code",
+        "represented by a latent code"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "107–115",
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_009",
+      "question_number": 9,
+      "query_text": "How does the building-model system automatically transform a detailed 3D building into a simpler model without losing too much of its appearance?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "semantic",
+      "category": "Semantic / Paraphrase",
+      "difficulty": "medium",
+      "expected_answers": [
+        "It constructs a visual hull from input silhouettes, removes redundant volumes to recover important concave structures, and then progressively simplifies the resulting mesh while optimizing the trade-off between triangle count and visual similarity."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_002",
+        "3528233.3530716_chunk_009",
+        "3528233.3530716_chunk_010",
+        "3528233.3530716_chunk_038"
+      ],
+      "expected_retrieval": [
+        "visual hull",
+        "concave structures",
+        "progressively simplifies",
+        "visual similarity"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "97–118",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_010",
+      "question_number": 10,
+      "query_text": "Why can simply applying a photo-to-drawing conversion independently to every video frame produce bad animation?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "semantic",
+      "category": "Semantic / Paraphrase",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Because independently processing frames can cause severe inter-frame discontinuities. For sparse portrait drawings, appearing and disappearing line elements make these inconsistencies especially noticeable."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_007"
+      ],
+      "expected_retrieval": [
+        "inter-frame discontinuities",
+        "sparse line elements",
+        "appearance and disappearance"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "84–95",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_011",
+      "question_number": 11,
+      "query_text": "How does the BRDF method avoid repeatedly performing expensive physical light-transport simulations?",
+      "pdf_number": "PDF-4",
+      "paper_id": "3528233.3530732",
+      "pdf_filename": "3528233.3530732.pdf",
+      "type": "semantic",
+      "category": "Semantic / Paraphrase",
+      "difficulty": "medium",
+      "expected_answers": [
+        "It represents BRDFs in a latent space and performs the layering operation on latent vectors using a neural layering network, replacing the expensive random-walk computation."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530732_chunk_004",
+        "3528233.3530732_chunk_009",
+        "3528233.3530732_chunk_013"
+      ],
+      "expected_retrieval": [
+        "latent space",
+        "neural layering network",
+        "random-walk computation"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "102–106",
+      "paper_title": "Neural Layered BRDFs"
+    },
+    {
+      "query_id": "rag_012",
+      "question_number": 12,
+      "query_text": "Why do traditional NeRF-based face models have difficulty supporting multiple identities?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "semantic",
+      "category": "Semantic / Paraphrase",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Traditional NeRFs are generally designed to represent a single scene/identity. MoRF addresses this by using a single volumetric model capable of representing multiple identities, with each identity represented through a latent code."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530753_chunk_010",
+        "3528233.3530753_chunk_019"
+      ],
+      "expected_retrieval": [
+        "single scene",
+        "multiple identities",
+        "latent code",
+        "single volumetric model"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "93–112",
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_013",
+      "question_number": 13,
+      "query_text": "Why can conventional objective metrics be unreliable when judging single-image HDR reconstruction?",
+      "pdf_number": "PDF-3",
+      "paper_id": "3528233.3530729",
+      "pdf_filename": "3528233.3530729.pdf",
+      "type": "semantic",
+      "category": "Semantic / Paraphrase",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Tone and color differences caused by inaccurate camera-response-curve inversion can dominate the metric scores, even though these differences may not correspond well to human judgments of image quality."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530729_chunk_002",
+        "3528233.3530729_chunk_008",
+        "3528233.3530729_chunk_040"
+      ],
+      "expected_retrieval": [
+        "camera-response-curve inversion",
+        "CRF reconstruction",
+        "metric scores",
+        "subjective results"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "112–130",
+      "paper_title": "Comparison of single image HDR reconstruction methods — the caveats of quality assessment"
+    },
+    {
+      "query_id": "rag_014",
+      "question_number": 14,
+      "query_text": "Why does the visual hull alone fail to fully represent some buildings, and how does the proposed method fix this?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "multi_hop",
+      "category": "Multi-Hop Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The visual hull captures the input silhouette but can miss important concave features. The second stage therefore subtracts redundant volumes from the visual hull to create a carved mesh that recovers those concave features."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_002",
+        "3528233.3530716_chunk_009",
+        "3528233.3530716_chunk_017",
+        "3528233.3530716_chunk_032"
+      ],
+      "expected_retrieval": [],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_015",
+      "question_number": 15,
+      "query_text": "Describe the pipeline that converts speech into an animated portrait line drawing.",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "multi_hop",
+      "category": "Multi-Hop Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The system first uses speech to predict facial landmark movements. Those target landmarks are then used by a GAN that simultaneously performs photo-to-drawing domain transfer and facial-geometry changes. Temporal coherence losses are subsequently used to make the animation consistent across frames."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_009",
+        "3528233.3530720_chunk_010",
+        "3528233.3530720_chunk_019"
+      ],
+      "expected_retrieval": [],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_016",
+      "question_number": 16,
+      "query_text": "How does MoRF represent multiple human identities while maintaining a common 3D representation?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "multi_hop",
+      "category": "Multi-Hop Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "MoRF trains a single volumetric model for all identities. Each identity has a latent code, while subject-specific deformation fields align identities to a common canonical NeRF. Skin regions receive partial deformation supervision because correspondence information is available there."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530753_chunk_010",
+        "3528233.3530753_chunk_025",
+        "3528233.3530753_chunk_028",
+        "3528233.3530753_chunk_031"
+      ],
+      "expected_retrieval": [],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_017",
+      "question_number": 17,
+      "query_text": "Why does the avatar method use both texel-aligned features and a volumetric representation?",
+      "pdf_number": "PDF-5",
+      "paper_id": "3528233.3530740",
+      "pdf_filename": "3528233.3530740.pdf",
+      "type": "multi_hop",
+      "category": "Multi-Hop Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "Texel-aligned features provide a localized, dense conditioning signal that combines structural information from a skeleton-based model with observed image signals. The volumetric representation handles articulated human bodies and avoids requiring high-quality mesh tracking."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530740_chunk_003",
+        "3528233.3530740_chunk_010",
+        "3528233.3530740_chunk_014"
+      ],
+      "expected_retrieval": [],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_018",
+      "question_number": 18,
+      "query_text": "How does the method remove unnecessary geometric parts from the initial building representation?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "keyword_mismatch",
+      "category": "Keyword-Mismatch Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "It uses Boolean subtraction of 3D primitives to carve redundant volumes from the visual hull."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_002",
+        "3528233.3530716_chunk_009",
+        "3528233.3530716_chunk_032"
+      ],
+      "expected_retrieval": [
+        "carve redundant structures",
+        "Boolean subtraction",
+        "visual hull"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "25–33",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_019",
+      "question_number": 19,
+      "query_text": "How does the portrait-animation system prevent individual frames from looking inconsistent with their neighbors?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "keyword_mismatch",
+      "category": "Keyword-Mismatch Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "It introduces two temporal coherence losses: one based on warping and another based on a temporal coherence discriminator."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_009",
+        "3528233.3530720_chunk_010",
+        "3528233.3530720_chunk_032"
+      ],
+      "expected_retrieval": [
+        "temporal coherence losses",
+        "warping",
+        "temporal coherence discriminator"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "47–51",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_020",
+      "question_number": 20,
+      "query_text": "How does the HDR evaluation process compensate for errors introduced when recovering the camera response?",
+      "pdf_number": "PDF-3",
+      "paper_id": "3528233.3530729",
+      "pdf_filename": "3528233.3530729.pdf",
+      "type": "keyword_mismatch",
+      "category": "Keyword-Mismatch Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "It introduces an explicit CRF correction step before computing image-quality metrics."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530729_chunk_002",
+        "3528233.3530729_chunk_008",
+        "3528233.3530729_chunk_040"
+      ],
+      "expected_retrieval": [
+        "CRF correction",
+        "camera response curve",
+        "image quality metrics"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "119–130",
+      "paper_title": "Comparison of single image HDR reconstruction methods — the caveats of quality assessment"
+    },
+    {
+      "query_id": "rag_021",
+      "question_number": 21,
+      "query_text": "How does the neural material model combine multiple material layers efficiently?",
+      "pdf_number": "PDF-4",
+      "paper_id": "3528233.3530732",
+      "pdf_filename": "3528233.3530732.pdf",
+      "type": "keyword_mismatch",
+      "category": "Keyword-Mismatch Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "It converts BRDFs into latent representations and performs layering operations directly on the latent vectors using a neural layering network."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530732_chunk_004",
+        "3528233.3530732_chunk_009",
+        "3528233.3530732_chunk_013"
+      ],
+      "expected_retrieval": [
+        "latent representations",
+        "neural layering network",
+        "latent vectors"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "102–106",
+      "paper_title": "Neural Layered BRDFs"
+    },
+    {
+      "query_id": "rag_022",
+      "question_number": 22,
+      "query_text": "How does the avatar method preserve detailed information from the driving performer instead of compressing everything into body pose?",
+      "pdf_number": "PDF-5",
+      "paper_id": "3528233.3530740",
+      "pdf_filename": "3528233.3530740.pdf",
+      "type": "keyword_mismatch",
+      "category": "Keyword-Mismatch Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "It uses texel-aligned features, a localized representation that combines structural priors from a skeleton-based model with observed sparse image signals."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530740_chunk_003",
+        "3528233.3530740_chunk_010",
+        "3528233.3530740_chunk_030"
+      ],
+      "expected_retrieval": [
+        "texel-aligned features",
+        "localized representation",
+        "dense conditioning signal"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "64–72",
+      "paper_title": "Drivable Volumetric Avatars using Texel-Aligned Features"
+    },
+    {
+      "query_id": "rag_023",
+      "question_number": 23,
+      "query_text": "What is the largest element count that users can tolerate during the low-poly mesh simplification process?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "numerical",
+      "category": "Numerical Retrieval",
+      "difficulty": "medium",
+      "expected_answers": [
+        "The paper denotes this threshold as T, the largest element count users are willing to tolerate."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_038"
+      ],
+      "expected_retrieval": [
+        "largest element count users can tolerate",
+        "threshold as T",
+        "T"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "514–522",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_024",
+      "question_number": 24,
+      "query_text": "What FID value does the proposed portrait-animation method report?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "numerical",
+      "category": "Numerical Retrieval",
+      "difficulty": "easy",
+      "expected_answers": [
+        "135.2"
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_036",
+        "3528233.3530720_chunk_037"
+      ],
+      "expected_retrieval": [
+        "135.2"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "595–600",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_025",
+      "question_number": 25,
+      "query_text": "How many VoxCeleb2 video clips were used for quantitative evaluation?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "numerical",
+      "category": "Numerical Retrieval",
+      "difficulty": "easy",
+      "expected_answers": [
+        "118 video clips."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_040",
+        "3528233.3530720_chunk_045"
+      ],
+      "expected_retrieval": [
+        "118 video clips",
+        "VoxCeleb2"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "689–693",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_026",
+      "question_number": 26,
+      "query_text": "How many subjects was MoRF trained on?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "numerical",
+      "category": "Numerical Retrieval",
+      "difficulty": "easy",
+      "expected_answers": [
+        "15 subjects."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530753_chunk_048"
+      ],
+      "expected_retrieval": [
+        "15 subjects"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "639–647",
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_027",
+      "question_number": 27,
+      "query_text": "What criterion causes an edge-flip operation in the low-poly mesh method?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "long_context",
+      "category": "Long-Context Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "An edge-flip is performed when a pair of adjacent triangles has an obtuse dihedral angle larger than the specified threshold, or when the exterior dihedral angle is below its corresponding threshold."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_042"
+      ],
+      "expected_retrieval": [
+        "edge-flip",
+        "obtuse dihedral angle",
+        "exterior dihedral angle"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "569–580",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_028",
+      "question_number": 28,
+      "query_text": "What metrics are used to rank the simplified meshes in the Pareto set?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "long_context",
+      "category": "Long-Context Retrieval",
+      "difficulty": "medium",
+      "expected_answers": [
+        "The meshes are ranked using: 1. Number of faces/triangles, 2. Visual difference from the input."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_038"
+      ],
+      "expected_retrieval": [
+        "Pareto",
+        "number of faces",
+        "visual differences"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "513–522",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_029",
+      "question_number": 29,
+      "query_text": "How is the deformation field in MoRF supervised differently for skin and non-skin regions?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "long_context",
+      "category": "Long-Context Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "Skin regions can receive partial supervision because corresponding skin surfaces are available across identities. Non-skin areas such as hair lack those correspondences, so the deformation is learned automatically."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530753_chunk_024",
+        "3528233.3530753_chunk_030",
+        "3528233.3530753_chunk_032"
+      ],
+      "expected_retrieval": [
+        "deformation field",
+        "skin regions",
+        "correspondence",
+        "non-skin"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "107–115",
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_030",
+      "question_number": 30,
+      "query_text": "What does CRF correction change about the correlation between image-quality metrics and subjective results?",
+      "pdf_number": "PDF-3",
+      "paper_id": "3528233.3530729",
+      "pdf_filename": "3528233.3530729.pdf",
+      "type": "long_context",
+      "category": "Long-Context Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The paper reports that CRF correction substantially improves metric behavior. For example, the highest correlation increased from 0.47 before correction to 0.55 after correction in one analysis, although the authors note that this remained too low for meaningful prediction."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530729_chunk_036"
+      ],
+      "expected_retrieval": [
+        "CRF correction",
+        "0.47",
+        "0.55",
+        "correlation"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "861–872",
+      "paper_title": "Comparison of single image HDR reconstruction methods — the caveats of quality assessment"
+    },
+    {
+      "query_id": "rag_031",
+      "question_number": 31,
+      "query_text": "What is the \"latent code\" used for?",
+      "pdf_number": [
+        "PDF-4",
+        "PDF-6"
+      ],
+      "paper_id": [
+        "3528233.3530732",
+        "3528233.3530753"
+      ],
+      "pdf_filename": [
+        "3528233.3530732.pdf",
+        "3528233.3530753.pdf"
+      ],
+      "type": "ambiguous",
+      "category": "Ambiguous Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "This question is intentionally ambiguous across multiple papers: For MoRF (PDF-6), a latent code represents an identity within the shared volumetric model. For Neural Layered BRDFs (PDF-4), latent vectors represent BRDFs and are used for layering operations."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530732_chunk_004",
+        "3528233.3530732_chunk_016",
+        "3528233.3530753_chunk_010",
+        "3528233.3530753_chunk_026"
+      ],
+      "expected_retrieval": [
+        "latent code",
+        "latent vectors",
+        "identity",
+        "BRDF"
+      ],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_032",
+      "question_number": 32,
+      "query_text": "What does \"warping\" do in the proposed system?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "ambiguous",
+      "category": "Ambiguous Retrieval",
+      "difficulty": "medium",
+      "expected_answers": [
+        "In the portrait-animation paper (PDF-2), warping is part of the temporal coherence mechanism and the animation framework."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_009",
+        "3528233.3530720_chunk_010",
+        "3528233.3530720_chunk_025"
+      ],
+      "expected_retrieval": [
+        "feature warping",
+        "warping",
+        "temporal coherence"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": null,
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_033",
+      "question_number": 33,
+      "query_text": "What is the \"layering network\"?",
+      "pdf_number": "PDF-4",
+      "paper_id": "3528233.3530732",
+      "pdf_filename": "3528233.3530732.pdf",
+      "type": "ambiguous",
+      "category": "Ambiguous Retrieval",
+      "difficulty": "medium",
+      "expected_answers": [
+        "In Neural Layered BRDFs, it is the neural network that performs layering operations on latent BRDF vectors, replacing expensive random-walk simulation."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530732_chunk_004",
+        "3528233.3530732_chunk_013",
+        "3528233.3530732_chunk_026"
+      ],
+      "expected_retrieval": [
+        "layering network",
+        "latent BRDF vectors",
+        "random-walk simulation"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "102–106",
+      "paper_title": "Neural Layered BRDFs"
+    },
+    {
+      "query_id": "rag_034",
+      "question_number": 34,
+      "query_text": "Compare how MoRF and Drivable Volumetric Avatars use volumetric representations.",
+      "pdf_number": [
+        "PDF-5",
+        "PDF-6"
+      ],
+      "paper_id": [
+        "3528233.3530740",
+        "3528233.3530753"
+      ],
+      "pdf_filename": [
+        "3528233.3530740.pdf",
+        "3528233.3530753.pdf"
+      ],
+      "type": "cross_document",
+      "category": "Cross-Document Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "MoRF uses a generative volumetric model to represent complete human heads with variable identities and multiview-consistent rendering. Drivable Volumetric Avatars uses a volumetric representation for articulated full-body avatars, combined with texel-aligned features to preserve information from driving signals."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530740_chunk_003",
+        "3528233.3530740_chunk_010",
+        "3528233.3530753_chunk_001",
+        "3528233.3530753_chunk_010",
+        "3528233.3530753_chunk_025"
+      ],
+      "expected_retrieval": [
+        "MoRF generative volumetric model",
+        "texel-aligned features",
+        "articulated full-body avatars"
+      ],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_035",
+      "question_number": 35,
+      "query_text": "Compare the role of latent representations in Neural Layered BRDFs and MoRF.",
+      "pdf_number": [
+        "PDF-4",
+        "PDF-6"
+      ],
+      "paper_id": [
+        "3528233.3530732",
+        "3528233.3530753"
+      ],
+      "pdf_filename": [
+        "3528233.3530732.pdf",
+        "3528233.3530753.pdf"
+      ],
+      "type": "cross_document",
+      "category": "Cross-Document Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "In Neural Layered BRDFs, the latent representation encodes BRDFs and allows the system to perform layering operations in latent space. In MoRF, each human identity is represented by a latent code within a shared volumetric model, allowing the model to represent multiple identities."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530732_chunk_004",
+        "3528233.3530732_chunk_013",
+        "3528233.3530753_chunk_010",
+        "3528233.3530753_chunk_026"
+      ],
+      "expected_retrieval": [
+        "BRDFs in latent space",
+        "identity represented by a latent code",
+        "shared volumetric model"
+      ],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_036",
+      "question_number": 36,
+      "query_text": "Compare the input signals used by the portrait animation system and the drivable avatar system.",
+      "pdf_number": [
+        "PDF-2",
+        "PDF-5"
+      ],
+      "paper_id": [
+        "3528233.3530720",
+        "3528233.3530740"
+      ],
+      "pdf_filename": [
+        "3528233.3530720.pdf",
+        "3528233.3530740.pdf"
+      ],
+      "type": "cross_document",
+      "category": "Cross-Document Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The portrait-animation method uses a speech signal to predict facial landmark movements, which are then used to drive facial animation. The avatar method uses driving signals containing observed information about the performer, represented through texel-aligned features and combined with structural priors."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_009",
+        "3528233.3530720_chunk_019",
+        "3528233.3530740_chunk_003",
+        "3528233.3530740_chunk_010"
+      ],
+      "expected_retrieval": [
+        "speech signal to predict facial landmark movements",
+        "texel-aligned features",
+        "driving signals"
+      ],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_037",
+      "question_number": 37,
+      "query_text": "Compare how the low-poly paper and Neural Layered BRDFs reduce computational complexity.",
+      "pdf_number": [
+        "PDF-1",
+        "PDF-4"
+      ],
+      "paper_id": [
+        "3528233.3530716",
+        "3528233.3530732"
+      ],
+      "pdf_filename": [
+        "3528233.3530716.pdf",
+        "3528233.3530732.pdf"
+      ],
+      "type": "cross_document",
+      "category": "Cross-Document Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The low-poly method reduces geometric complexity by progressively simplifying a carved mesh using edge-collapse and edge-flip operations, then selecting from a Pareto set. Neural Layered BRDFs reduce the cost of layered-material evaluation by replacing expensive Monte Carlo/random-walk operations with neural operations in latent space."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_002",
+        "3528233.3530716_chunk_038",
+        "3528233.3530732_chunk_004",
+        "3528233.3530732_chunk_009"
+      ],
+      "expected_retrieval": [
+        "edge-collapse and edge-flip",
+        "Pareto set",
+        "replacing expensive random-walk",
+        "latent space"
+      ],
+      "answerable": true,
+      "false_premise": false
+    },
+    {
+      "query_id": "rag_038",
+      "question_number": 38,
+      "query_text": "Since the low-poly building paper uses NeRF, how does its NeRF architecture generate building silhouettes?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "adversarial",
+      "category": "Adversarial Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The premise is false. The paper does not describe using NeRF for its visual hull. It constructs the visual hull using 3D primitives and Boolean intersections of input silhouettes."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_002",
+        "3528233.3530716_chunk_009"
+      ],
+      "expected_retrieval": [
+        "Boolean intersecting",
+        "visual hull",
+        "silhouettes"
+      ],
+      "answerable": true,
+      "false_premise": true,
+      "reference_lines": "25–33",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_039",
+      "question_number": 39,
+      "query_text": "The portrait-animation method predicts facial landmarks directly from the input photograph. How does this work?",
+      "pdf_number": "PDF-2",
+      "paper_id": "3528233.3530720",
+      "pdf_filename": "3528233.3530720.pdf",
+      "type": "adversarial",
+      "category": "Adversarial Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The premise is incorrect. The method predicts facial landmark movements from the speech signal. It uses the speech-to-facial-landmark translation module from MakeItTalk."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530720_chunk_009",
+        "3528233.3530720_chunk_019"
+      ],
+      "expected_retrieval": [
+        "speech to facial landmark",
+        "MakeItTalk"
+      ],
+      "answerable": true,
+      "false_premise": true,
+      "reference_lines": "236–247",
+      "paper_title": "Animating Portrait Line Drawings from a Single Face Photo and a Speech Signal"
+    },
+    {
+      "query_id": "rag_040",
+      "question_number": 40,
+      "query_text": "Since MoRF uses StyleGAN2, how does its StyleGAN generator maintain multiview consistency?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "adversarial",
+      "category": "Adversarial Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "This contains a false premise. StyleGAN2 is discussed as related/background work. MoRF instead extends NeRF into a morphable generative neural model for multiview-consistent human-head rendering."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530753_chunk_001",
+        "3528233.3530753_chunk_010",
+        "3528233.3530753_chunk_019"
+      ],
+      "expected_retrieval": [
+        "StyleGAN2",
+        "extends NeRF",
+        "multiview-consistent"
+      ],
+      "answerable": true,
+      "false_premise": true,
+      "reference_lines": "24–36",
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_041",
+      "question_number": 41,
+      "query_text": "Why does Neural Layered BRDFs perform Monte Carlo random walks during every final evaluation?",
+      "pdf_number": "PDF-4",
+      "paper_id": "3528233.3530732",
+      "pdf_filename": "3528233.3530732.pdf",
+      "type": "adversarial",
+      "category": "Adversarial Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The premise is false. The proposed method is designed to replace expensive random-walk computation with a neural layering operation in latent space."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530732_chunk_004",
+        "3528233.3530732_chunk_009",
+        "3528233.3530732_chunk_013"
+      ],
+      "expected_retrieval": [
+        "replacing expensive random-walk",
+        "neural layering"
+      ],
+      "answerable": true,
+      "false_premise": true,
+      "reference_lines": "102–106",
+      "paper_title": "Neural Layered BRDFs"
+    },
+    {
+      "query_id": "rag_042",
+      "question_number": 42,
+      "query_text": "What high-quality mesh-tracking algorithm is required before the avatar model can operate?",
+      "pdf_number": "PDF-5",
+      "paper_id": "3528233.3530740",
+      "pdf_filename": "3528233.3530740.pdf",
+      "type": "adversarial",
+      "category": "Adversarial Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The premise is false. The paper explicitly states that its volumetric representation does not require high-quality mesh tracking as a prerequisite."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530740_chunk_010",
+        "3528233.3530740_chunk_014"
+      ],
+      "expected_retrieval": [
+        "mesh-based approaches require accurate tracking",
+        "volumetric representation"
+      ],
+      "answerable": true,
+      "false_premise": true,
+      "reference_lines": "75–79",
+      "paper_title": "Drivable Volumetric Avatars using Texel-Aligned Features"
+    },
+    {
+      "query_id": "rag_043",
+      "question_number": 43,
+      "query_text": "The HDR paper shows that image-quality metrics reliably rank all six methods. What evidence supports this?",
+      "pdf_number": "PDF-3",
+      "paper_id": "3528233.3530729",
+      "pdf_filename": "3528233.3530729.pdf",
+      "type": "adversarial",
+      "category": "Adversarial Retrieval",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The premise is false. The paper reports that metric predictions correlate poorly with subjective quality scores and emphasizes limitations of existing metrics."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530729_chunk_002",
+        "3528233.3530729_chunk_008",
+        "3528233.3530729_chunk_043",
+        "3528233.3530729_chunk_048"
+      ],
+      "expected_retrieval": [
+        "metric predictions correlate poorly",
+        "subjective quality"
+      ],
+      "answerable": true,
+      "false_premise": true,
+      "reference_lines": "55–79",
+      "paper_title": "Comparison of single image HDR reconstruction methods — the caveats of quality assessment"
+    },
+    {
+      "query_id": "rag_044",
+      "question_number": 44,
+      "query_text": "What was the annual licensing fee charged to mobile game developers for using the low-poly mesh algorithm?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "negative",
+      "category": "Negative / Unanswerable Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Not answerable from the provided PDFs."
+      ],
+      "expected_doc_ids": [],
+      "expected_retrieval": [],
+      "answerable": false,
+      "false_premise": false,
+      "reference_lines": null,
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_045",
+      "question_number": 45,
+      "query_text": "What was the salary of the researchers who developed MoRF?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "negative",
+      "category": "Negative / Unanswerable Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Not answerable from the provided PDFs."
+      ],
+      "expected_doc_ids": [],
+      "expected_retrieval": [],
+      "answerable": false,
+      "false_premise": false,
+      "reference_lines": null,
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_046",
+      "question_number": 46,
+      "query_text": "What was the exact retail price of the GPU used to train MoRF?",
+      "pdf_number": "PDF-6",
+      "paper_id": "3528233.3530753",
+      "pdf_filename": "3528233.3530753.pdf",
+      "type": "negative",
+      "category": "Negative / Unanswerable Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Not answerable from the provided PDFs."
+      ],
+      "expected_doc_ids": [],
+      "expected_retrieval": [],
+      "answerable": false,
+      "false_premise": false,
+      "reference_lines": null,
+      "paper_title": "MoRF: Morphable Radiance Fields for Multiview Neural Head Modeling"
+    },
+    {
+      "query_id": "rag_047",
+      "question_number": 47,
+      "query_text": "How much revenue did Meta generate from the Drivable Volumetric Avatars project?",
+      "pdf_number": "PDF-5",
+      "paper_id": "3528233.3530740",
+      "pdf_filename": "3528233.3530740.pdf",
+      "type": "negative",
+      "category": "Negative / Unanswerable Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Not answerable from the provided PDFs."
+      ],
+      "expected_doc_ids": [],
+      "expected_retrieval": [],
+      "answerable": false,
+      "false_premise": false,
+      "reference_lines": null,
+      "paper_title": "Drivable Volumetric Avatars using Texel-Aligned Features"
+    },
+    {
+      "query_id": "rag_048",
+      "question_number": 48,
+      "query_text": "What was the home address of the corresponding author of Neural Layered BRDFs?",
+      "pdf_number": "PDF-4",
+      "paper_id": "3528233.3530732",
+      "pdf_filename": "3528233.3530732.pdf",
+      "type": "negative",
+      "category": "Negative / Unanswerable Tests",
+      "difficulty": "medium",
+      "expected_answers": [
+        "Not answerable from the provided PDFs."
+      ],
+      "expected_doc_ids": [],
+      "expected_retrieval": [],
+      "answerable": false,
+      "false_premise": false,
+      "reference_lines": null,
+      "paper_title": "Neural Layered BRDFs"
+    },
+    {
+      "query_id": "rag_049",
+      "question_number": 49,
+      "query_text": "What percentage of the low-poly building dataset was non-manifold and what percentage was non-watertight?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "needle_in_haystack",
+      "category": "Needle in Haystack",
+      "difficulty": "hard",
+      "expected_answers": [
+        "The dataset contained: 39% non-manifold models and 88% non-watertight models."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_048"
+      ],
+      "expected_retrieval": [
+        "39% (resp. 88%) are non-manifold (resp. non-watertight)",
+        "39%",
+        "88%"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "637–642",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    },
+    {
+      "query_id": "rag_050",
+      "question_number": 50,
+      "query_text": "What strategy does the low-poly method use when deciding which edge to collapse?",
+      "pdf_number": "PDF-1",
+      "paper_id": "3528233.3530716",
+      "pdf_filename": "3528233.3530716.pdf",
+      "type": "detailed_technical",
+      "category": "Detailed Technical",
+      "difficulty": "hard",
+      "expected_answers": [
+        "For edge-collapse, the method uses QEM (Quadric Error Metrics) to rank the edges and adds a virtual perpendicular plane with a small weight to combat coplanar degeneracy."
+      ],
+      "expected_doc_ids": [
+        "3528233.3530716_chunk_042"
+      ],
+      "expected_retrieval": [
+        "QEM",
+        "virtual perpendicular plane",
+        "coplanar degeneracy"
+      ],
+      "answerable": true,
+      "false_premise": false,
+      "reference_lines": "569–580",
+      "paper_title": "Low-poly Mesh Generation for Building Models"
+    }
+  ]
+}

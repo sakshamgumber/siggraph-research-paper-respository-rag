@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+docling
+qdrant-client
+huggingface_hub
+transformers
+pyyaml
+evret
+requests
+python-dotenv
+groq

@@ -1,0 +1,482 @@
+{
+  "queries": [
+    {
+      "query_id": "styleid_q01",
+      "query_text": "What is the main problem addressed by the paper?",
+      "expected_answers": [
+        "The paper addresses diffusion-based style transfer methods that require inference-stage optimization such as fine-tuning or textual inversion, which can be time-consuming."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_001",
+        "2312.09008_chunk_004",
+        "2312.09008_chunk_038"
+      ]
+    },
+    {
+      "query_id": "styleid_q02",
+      "query_text": "What is the main idea proposed by the paper?",
+      "expected_answers": [
+        "It performs training-free style transfer by manipulating self-attention features and replacing the content image's key and value features with those from the style image during generation."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_009",
+        "2312.09008_chunk_046",
+        "2312.09008_chunk_003"
+      ]
+    },
+    {
+      "query_id": "styleid_q03",
+      "query_text": "Does the proposed method require additional optimization or supervision?",
+      "expected_answers": [
+        "No. The method is training-free and does not require optimization or supervision such as text conditioning."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_004",
+        "2312.09008_chunk_012",
+        "2312.09008_chunk_010"
+      ]
+    },
+    {
+      "query_id": "styleid_q04",
+      "query_text": "Which components of self-attention are replaced during style injection?",
+      "expected_answers": [
+        "The key (K) and value (V) of the content self-attention are replaced with the corresponding key and value features from the style image."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_003",
+        "2312.09008_chunk_018",
+        "2312.09008_chunk_005"
+      ]
+    },
+    {
+      "query_id": "styleid_q05",
+      "query_text": "Why does the paper preserve the query from the content image?",
+      "expected_answers": [
+        "Query preservation helps retain the spatial structure and original content during the reverse diffusion process."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_009",
+        "2312.09008_chunk_040",
+        "2312.09008_chunk_018"
+      ]
+    },
+    {
+      "query_id": "styleid_q06",
+      "query_text": "What parameter controls the degree of query preservation?",
+      "expected_answers": [
+        "The parameter is \\gamma, which blends the content query and stylized-image query."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_066",
+        "2312.09008_chunk_023",
+        "2312.09008_chunk_001"
+      ]
+    },
+    {
+      "query_id": "styleid_q07",
+      "query_text": "What happens when \\gamma is increased?",
+      "expected_answers": [
+        "A higher \\gamma preserves more content, while a lower \\gamma produces a stronger style-transfer effect."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_023",
+        "2312.09008_chunk_007",
+        "2312.09008_chunk_026"
+      ]
+    },
+    {
+      "query_id": "styleid_q08",
+      "query_text": "What happens when \\gamma is decreased?",
+      "expected_answers": [
+        "Lower \\gamma reflects more of the style but sacrifices more of the original content."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_040",
+        "2312.09008_chunk_022",
+        "2312.09008_chunk_023"
+      ]
+    },
+    {
+      "query_id": "styleid_q09",
+      "query_text": "Which decoder layers are used for style injection?",
+      "expected_answers": [
+        "The latter decoder layers, specifically the 7th\u201312th decoder layers in Stable Diffusion, because they are relevant to local textures."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_009",
+        "2312.09008_chunk_023",
+        "2312.09008_chunk_001"
+      ]
+    },
+    {
+      "query_id": "styleid_q10",
+      "query_text": "Why does replacing the style key cause an attention-map problem?",
+      "expected_answers": [
+        "Because content and style features can be highly unrelated, their similarity magnitude becomes lower, causing the attention map to become blurred or overly smooth."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_024",
+        "2312.09008_chunk_044",
+        "2312.09008_chunk_005"
+      ]
+    },
+    {
+      "query_id": "styleid_q11",
+      "query_text": "What technique is introduced to solve the blurred attention-map problem?",
+      "expected_answers": [
+        "Attention temperature scaling is introduced."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_009",
+        "2312.09008_chunk_010",
+        "2312.09008_chunk_025"
+      ]
+    },
+    {
+      "query_id": "styleid_q12",
+      "query_text": "What is the default value of the attention temperature parameter \tau?",
+      "expected_answers": [
+        "The default value is \tau = 1.5."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_025",
+        "2312.09008_chunk_065",
+        "2312.09008_chunk_001"
+      ]
+    },
+    {
+      "query_id": "styleid_q13",
+      "query_text": "Where is the temperature parameter applied?",
+      "expected_answers": [
+        "It multiplies the scaled query-key similarity before the softmax operation."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_024",
+        "2312.09008_chunk_001",
+        "2312.09008_chunk_009"
+      ]
+    },
+    {
+      "query_id": "styleid_q14",
+      "query_text": "Why is \tau greater than 1?",
+      "expected_answers": [
+        "Multiplying the pre-softmax attention logits by a value greater than 1 makes the resulting attention distribution sharper."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_025",
+        "2312.09008_chunk_007",
+        "2312.09008_chunk_003"
+      ]
+    },
+    {
+      "query_id": "styleid_q15",
+      "query_text": "What problem does initial latent AdaIN address?",
+      "expected_answers": [
+        "It addresses the failure to properly transfer the color tone of the style image."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_001",
+        "2312.09008_chunk_046",
+        "2312.09008_chunk_010"
+      ]
+    },
+    {
+      "query_id": "styleid_q16",
+      "query_text": "Why does style injection alone fail to transfer color effectively?",
+      "expected_answers": [
+        "The paper observes that self-attention feature substitution mainly transfers textures and local patterns, while having less effect on color tones."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_026",
+        "2312.09008_chunk_009",
+        "2312.09008_chunk_065"
+      ]
+    },
+    {
+      "query_id": "styleid_q17",
+      "query_text": "What information from the initial latent is used by AdaIN?",
+      "expected_answers": [
+        "The channel-wise mean and standard deviation of the style latent are used to modify the content latent."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_019",
+        "2312.09008_chunk_027",
+        "2312.09008_chunk_018"
+      ]
+    },
+    {
+      "query_id": "styleid_q18",
+      "query_text": "What is the purpose of using the style latent directly instead of combining it with the content latent?",
+      "expected_answers": [
+        "Directly using the style latent can transfer the style's structural information and therefore cause the content structure to be lost."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_027",
+        "2312.09008_chunk_022",
+        "2312.09008_chunk_034"
+      ]
+    },
+    {
+      "query_id": "styleid_q19",
+      "query_text": "What diffusion model is used in the experiments?",
+      "expected_answers": [
+        "Stable Diffusion 1.4 pretrained on the LAION dataset."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_032",
+        "2312.09008_chunk_004",
+        "2312.09008_chunk_010"
+      ]
+    },
+    {
+      "query_id": "styleid_q20",
+      "query_text": "Which sampling method is used?",
+      "expected_answers": [
+        "DDIM sampling with 50 timesteps."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_032",
+        "2312.09008_chunk_038",
+        "2312.09008_chunk_072"
+      ]
+    },
+    {
+      "query_id": "styleid_q21",
+      "query_text": "What are the default values of \\gamma and \tau?",
+      "expected_answers": [
+        "\\gamma = 0.75 and \tau = 1.5."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_025"
+      ]
+    },
+    {
+      "query_id": "styleid_q22",
+      "query_text": "Which datasets are used for content and style images?",
+      "expected_answers": [
+        "MS-COCO is used for content images and WikiArt is used for style images."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_001",
+        "2312.09008_chunk_003"
+      ]
+    },
+    {
+      "query_id": "styleid_q23",
+      "query_text": "How many content and style images were selected for quantitative evaluation?",
+      "expected_answers": [
+        "20 content images and 40 style images were randomly selected, producing 800 stylized images."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_066",
+        "2312.09008_chunk_029"
+      ]
+    },
+    {
+      "query_id": "styleid_q24",
+      "query_text": "What is ArtFID designed to evaluate?",
+      "expected_answers": [
+        "ArtFID evaluates overall style-transfer performance by considering both content and style preservation."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_036",
+        "2312.09008_chunk_038"
+      ]
+    },
+    {
+      "query_id": "styleid_q25",
+      "query_text": "What is the formula for ArtFID?",
+      "expected_answers": [
+        "ArtFID = (1 + LPIPS) \times (1 + FID)."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_038",
+        "2312.09008_chunk_029",
+        "2312.09008_chunk_030"
+      ]
+    },
+    {
+      "query_id": "styleid_q26",
+      "query_text": "What does LPIPS measure in this paper?",
+      "expected_answers": [
+        "LPIPS measures content fidelity between the stylized image and the corresponding content image."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_034",
+        "2312.09008_chunk_068"
+      ]
+    },
+    {
+      "query_id": "styleid_q27",
+      "query_text": "What does FID measure in this paper?",
+      "expected_answers": [
+        "FID measures style fidelity between the stylized image and the corresponding style image."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_068",
+        "2312.09008_chunk_034"
+      ]
+    },
+    {
+      "query_id": "styleid_q28",
+      "query_text": "Why did the authors introduce CFSD?",
+      "expected_answers": [
+        "They argue that LPIPS can be affected by style because it uses AlexNet features, which are texture-biased. CFSD is designed to focus on spatial correlation between image patches."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_034",
+        "2312.09008_chunk_004",
+        "2312.09008_chunk_005"
+      ]
+    },
+    {
+      "query_id": "styleid_q29",
+      "query_text": "What network feature is used to calculate CFSD?",
+      "expected_answers": [
+        "The output feature of the conv3 layer of VGG19 is used."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_035",
+        "2312.09008_chunk_024",
+        "2312.09008_chunk_020"
+      ]
+    },
+    {
+      "query_id": "styleid_q30",
+      "query_text": "How is CFSD mathematically defined?",
+      "expected_answers": [
+        "CFSD is defined as the KL divergence between the correlation maps of the content image and stylized image."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_035",
+        "2312.09008_chunk_024",
+        "2312.09008_chunk_033"
+      ]
+    },
+    {
+      "query_id": "styleid_q31",
+      "query_text": "What was the ArtFID obtained by the proposed method?",
+      "expected_answers": [
+        "28.801."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_036",
+        "2312.09008_chunk_038"
+      ]
+    },
+    {
+      "query_id": "styleid_q32",
+      "query_text": "What FID did the proposed method obtain?",
+      "expected_answers": [
+        "18.131."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_013",
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_036"
+      ]
+    },
+    {
+      "query_id": "styleid_q33",
+      "query_text": "What LPIPS did the proposed method obtain?",
+      "expected_answers": [
+        "0.5055."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_013",
+        "2312.09008_chunk_033",
+        "2312.09008_chunk_036"
+      ]
+    },
+    {
+      "query_id": "styleid_q34",
+      "query_text": "What CFSD did the proposed method obtain?",
+      "expected_answers": [
+        "0.2281."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_013",
+        "2312.09008_chunk_036",
+        "2312.09008_chunk_072"
+      ]
+    },
+    {
+      "query_id": "styleid_q35",
+      "query_text": "What is the inference time reported for the proposed method?",
+      "expected_answers": [
+        "12.4 seconds for a content-style pair on a single TITAN RTX GPU."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_038",
+        "2312.09008_chunk_039",
+        "2312.09008_chunk_066"
+      ]
+    },
+    {
+      "query_id": "styleid_q36",
+      "query_text": "How is the 12.4-second inference time divided?",
+      "expected_answers": [
+        "8.2 seconds are spent on DDIM inversion and 4.2 seconds on sampling."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_038",
+        "2312.09008_chunk_001",
+        "2312.09008_chunk_021"
+      ]
+    },
+    {
+      "query_id": "styleid_q37",
+      "query_text": "Why is the proposed method faster than the other diffusion-based methods?",
+      "expected_answers": [
+        "It can use fewer DDIM inversion steps because it also utilizes features collected during inversion, reducing the need for perfect inversion."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_038",
+        "2312.09008_chunk_046",
+        "2312.09008_chunk_072"
+      ]
+    },
+    {
+      "query_id": "styleid_q38",
+      "query_text": "What happens when the style-injection component is removed?",
+      "expected_answers": [
+        "ArtFID becomes 43.72, FID becomes 27.13, and LPIPS becomes 0.554."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_043",
+        "2312.09008_chunk_041",
+        "2312.09008_chunk_029"
+      ]
+    },
+    {
+      "query_id": "styleid_q39",
+      "query_text": "What happens when attention scaling is removed?",
+      "expected_answers": [
+        "ArtFID becomes 29.02, FID becomes 17.81, and LPIPS becomes 0.542."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_043",
+        "2312.09008_chunk_041",
+        "2312.09008_chunk_029"
+      ]
+    },
+    {
+      "query_id": "styleid_q40",
+      "query_text": "What happens when initial latent AdaIN is removed?",
+      "expected_answers": [
+        "ArtFID becomes 29.26, FID becomes 20.05, and LPIPS becomes 0.390."
+      ],
+      "expected_doc_ids": [
+        "2312.09008_chunk_043",
+        "2312.09008_chunk_041",
+        "2312.09008_chunk_029"
+      ]
+    }
+  ]
+}

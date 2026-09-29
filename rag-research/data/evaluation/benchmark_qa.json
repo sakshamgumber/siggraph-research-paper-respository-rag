@@ -1,0 +1,44 @@
+{
+  "queries": [
+    {
+      "query_id": "qa_001",
+      "query_text": "What is the primary objective and framework of FontDiffuser?",
+      "expected_doc_ids": ["paper_001_chunk_001", "paper_001_chunk_006", "paper_001_chunk_008"]
+    },
+    {
+      "query_id": "qa_002",
+      "query_text": "How does the Reference-Structure Interaction RSI block facilitate structural deformation?",
+      "expected_doc_ids": ["paper_001_chunk_007", "paper_001_chunk_020"]
+    },
+    {
+      "query_id": "qa_003",
+      "query_text": "What is the Multi-scale Content Aggregation MCA block and how does it inject content cues into the UNet?",
+      "expected_doc_ids": ["paper_001_chunk_017", "paper_001_chunk_018"]
+    },
+    {
+      "query_id": "qa_004",
+      "query_text": "What does the Style Contrastive Refinement SCR module do to disentangle styles?",
+      "expected_doc_ids": ["paper_001_chunk_021", "paper_001_chunk_022", "paper_001_chunk_023"]
+    },
+    {
+      "query_id": "qa_005",
+      "query_text": "What is the coarse-to-fine two-phase training strategy in FontDiffuser?",
+      "expected_doc_ids": ["paper_001_chunk_025", "paper_001_chunk_026"]
+    },
+    {
+      "query_id": "qa_006",
+      "query_text": "How many fonts are in the Chinese font dataset and how were seen and unseen fonts selected?",
+      "expected_doc_ids": ["paper_001_chunk_027"]
+    },
+    {
+      "query_id": "qa_007",
+      "query_text": "What optimizer learning rate and hyperparameters are used during FontDiffuser training?",
+      "expected_doc_ids": ["paper_001_chunk_029"]
+    },
+    {
+      "query_id": "qa_008",
+      "query_text": "What sampling acceleration technique and classifier-free guidance scale are used during inference?",
+      "expected_doc_ids": ["paper_001_chunk_030"]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "quant_bench_fp32": {
+    "label": "FP32 (Baseline)",
+    "collection": "quant_bench_fp32",
+    "compression_ratio": "1x (4.0 KB/vec)",
+    "points_count": 5000,
+    "indexed_vectors_count": 5000,
+    "hit_rate_at_1": 27.5,
+    "hit_rate_at_3": 45.0,
+    "hit_rate_at_5": 57.5,
+    "mrr_at_5": 0.38,
+    "ndcg_at_5": 0.2368,
+    "precision_at_1": 27.5,
+    "recall_at_5": 24.17,
+    "latency_avg_ms": 385.3,
+    "latency_p50_ms": 367.8,
+    "latency_p95_ms": 817.63
+  },
+  "quant_bench_int8": {
+    "label": "INT8 (Scalar Quant)",
+    "collection": "quant_bench_int8",
+    "compression_ratio": "4x (1.0 KB/vec)",
+    "points_count": 5000,
+    "indexed_vectors_count": 5000,
+    "hit_rate_at_1": 27.5,
+    "hit_rate_at_3": 45.0,
+    "hit_rate_at_5": 57.5,
+    "mrr_at_5": 0.38,
+    "ndcg_at_5": 0.2368,
+    "precision_at_1": 27.5,
+    "recall_at_5": 24.17,
+    "latency_avg_ms": 307.17,
+    "latency_p50_ms": 276.21,
+    "latency_p95_ms": 428.32
+  },
+  "quant_bench_turbo4": {
+    "label": "Turbo4 (Product Quant)",
+    "collection": "quant_bench_turbo4",
+    "compression_ratio": "16x (~0.25 KB/vec)",
+    "points_count": 5000,
+    "indexed_vectors_count": 5000,
+    "hit_rate_at_1": 25.0,
+    "hit_rate_at_3": 47.5,
+    "hit_rate_at_5": 60.0,
+    "mrr_at_5": 0.3775,
+    "ndcg_at_5": 0.251,
+    "precision_at_1": 25.0,
+    "recall_at_5": 27.5,
+    "latency_avg_ms": 303.33,
+    "latency_p50_ms": 277.52,
+    "latency_p95_ms": 482.72
+  }
+}

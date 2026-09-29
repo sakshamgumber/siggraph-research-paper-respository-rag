@@ -1,0 +1,15 @@
+{
+  "query_count": 40,
+  "generated_at": "2026-09-24T07:55:12.817168+00:00",
+  "metrics": {
+    "hit_rate@1": 0.325,
+    "hit_rate@3": 0.5,
+    "hit_rate@5": 0.675,
+    "mrr@5": 0.4495833333333333,
+    "ndcg@5": 0.30403710374041093,
+    "precision@1": 0.325,
+    "recall@5": 0.31666666666666676
+  },
+  "collection": "research_chunks_jina_v5",
+  "avg_latency_ms": 606.23
+}
