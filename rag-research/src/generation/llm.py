@@ -8,9 +8,13 @@ from typing import Any
 from dotenv import load_dotenv
 from groq import Groq
 
+from api.logger import get_logger
+
 # Load environment variables from project .env
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 load_dotenv()
+
+log = get_logger("src.generation.llm")
 
 DEFAULT_GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 FALLBACK_GROQ_MODEL = "openai/gpt-oss-20b"
@@ -117,6 +121,13 @@ class GroqGenerator:
 
         formatted_context = self.format_context(retrieved_chunks)
 
+        log.debug(
+            "[LLM] Formatted context (%d chars, %d chunks):\n%s",
+            len(formatted_context),
+            len(retrieved_chunks),
+            formatted_context,
+        )
+
         user_content = f"""Retrieved Research Context:
 {formatted_context}
 
@@ -130,6 +141,16 @@ Please provide a clear, factual answer synthesized from the retrieved research c
             {"role": "user", "content": user_content},
         ]
 
+        log.debug(
+            "[LLM] Calling Groq | model=%s | temperature=%.2f | max_tokens=%d | "
+            "system_prompt_chars=%d | user_content_chars=%d",
+            model,
+            temp,
+            tokens,
+            len(system_prompt),
+            len(user_content),
+        )
+
         t0 = time.perf_counter()
         try:
             response = self.client.chat.completions.create(
@@ -141,7 +162,12 @@ Please provide a clear, factual answer synthesized from the retrieved research c
         except Exception as exc:
             # If the primary model failed (e.g. rate limit/unsupported), try fallback model
             if model != FALLBACK_GROQ_MODEL:
-                print(f"Model {model} failed ({exc}). Retrying with fallback {FALLBACK_GROQ_MODEL}...")
+                log.warning(
+                    "[LLM] Model %r failed (%s). Retrying with fallback %r...",
+                    model,
+                    exc,
+                    FALLBACK_GROQ_MODEL,
+                )
                 model = FALLBACK_GROQ_MODEL
                 response = self.client.chat.completions.create(
                     model=model,
@@ -150,6 +176,7 @@ Please provide a clear, factual answer synthesized from the retrieved research c
                     max_tokens=tokens,
                 )
             else:
+                log.exception("[LLM] Fallback model %r also failed: %s", model, exc)
                 raise
 
         latency_ms = (time.perf_counter() - t0) * 1000.0
@@ -166,6 +193,19 @@ Please provide a clear, factual answer synthesized from the retrieved research c
                 "total_tokens": response.usage.total_tokens,
             }
 
+        log.debug(
+            "[LLM] Response | model=%s | latency=%.1f ms | "
+            "prompt_tokens=%s | completion_tokens=%s | total_tokens=%s",
+            model,
+            latency_ms,
+            usage.get("prompt_tokens"),
+            usage.get("completion_tokens"),
+            usage.get("total_tokens"),
+        )
+        log.debug("[LLM] Answer text (%d chars):\n%s", len(answer_text), answer_text.strip())
+        if reasoning_text:
+            log.debug("[LLM] Reasoning text (%d chars):\n%s", len(reasoning_text), reasoning_text.strip())
+
         return {
             "answer": answer_text.strip(),
             "reasoning": reasoning_text.strip() if reasoning_text else None,
@@ -173,3 +213,4 @@ Please provide a clear, factual answer synthesized from the retrieved research c
             "usage": usage,
             "latency_ms": round(latency_ms, 2),
         }
+

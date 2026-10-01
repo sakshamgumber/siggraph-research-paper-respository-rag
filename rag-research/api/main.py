@@ -6,8 +6,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from api.logger import get_logger
 from src.generation.llm import GroqGenerator
 from src.retrieval.vector_search import DEFAULT_COLLECTION, index_chunks, search_chunks
+
+log = get_logger("api.main")
 
 app = FastAPI(
     title="SIGGRAPH Research Engine API",
@@ -100,6 +103,16 @@ class IndexResponse(BaseModel):
 
 @app.post("/search", response_model=SearchResponse)
 def search(request: SearchRequest):
+    log.info(
+        "[SEARCH] query=%r | collection=%s | limit=%d | rerank=%s | paper_id=%s",
+        request.query,
+        request.collection,
+        request.limit,
+        request.rerank,
+        request.paper_id or "all",
+    )
+
+    t0 = time.perf_counter()
     try:
         hits = search_chunks(
             request.query,
@@ -112,11 +125,26 @@ def search(request: SearchRequest):
             reranker_model=request.reranker_model,
         )
     except Exception as exc:
+        log.exception("[SEARCH] Vector search failed: %s", exc)
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+    retrieval_ms = (time.perf_counter() - t0) * 1000.0
+
+    log.debug("[SEARCH] Retrieved %d hits in %.1f ms", len(hits), retrieval_ms)
 
     response_hits = []
-    for hit in hits:
+    for idx, hit in enumerate(hits, start=1):
         payload = hit.payload or {}
+        log.debug(
+            "[SEARCH][Hit %d] score=%.4f | rerank_score=%s | chunk_id=%s | paper=%s | section=%r | page=%s | text_preview=%r",
+            idx,
+            hit.score,
+            f"{payload.get('rerank_score'):.4f}" if payload.get("rerank_score") is not None else "N/A",
+            payload.get("chunk_id"),
+            payload.get("paper_id"),
+            payload.get("section") or payload.get("subsection"),
+            payload.get("page"),
+            (payload.get("text") or "")[:120],
+        )
         response_hits.append(
             SearchHit(
                 score=hit.score,
@@ -135,6 +163,7 @@ def search(request: SearchRequest):
             )
         )
 
+    log.info("[SEARCH] ✓ Returning %d results in %.1f ms", len(response_hits), retrieval_ms)
     return SearchResponse(
         query=request.query,
         collection=request.collection,
@@ -149,8 +178,16 @@ def search(request: SearchRequest):
 
 @app.post("/index", response_model=IndexResponse)
 def index(request: IndexRequest):
+    log.info(
+        "[INDEX] jsonl_path=%s | collection=%s | batch_size=%d | recreate=%s",
+        request.jsonl_path,
+        request.collection,
+        request.batch_size,
+        request.recreate,
+    )
     jsonl_path = Path(request.jsonl_path)
     if not jsonl_path.exists():
+        log.error("[INDEX] File not found: %s", request.jsonl_path)
         raise HTTPException(
             status_code=404,
             detail=f"Chunk file not found: {request.jsonl_path}",
@@ -164,8 +201,10 @@ def index(request: IndexRequest):
             recreate=request.recreate,
         )
     except Exception as exc:
+        log.exception("[INDEX] Indexing failed: %s", exc)
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
+    log.info("[INDEX] ✓ Indexed %d chunks into collection '%s'", indexed, request.collection)
     return IndexResponse(collection=request.collection, indexed=indexed)
 
 
@@ -224,9 +263,25 @@ def ask(request: RagAskRequest):
     3. Feed reranked context into Groq LLM (openai/gpt-oss-120b).
     4. Return synthesized, grounded response with inline citations and sources.
     """
+    log.info(
+        "[ASK] ══════════════════════════════════════════════════════════",
+    )
+    log.info(
+        "[ASK] query=%r | model=%s | limit=%d | rerank=%s | paper_id=%s | temp=%.2f | max_tokens=%d",
+        request.query,
+        request.model or "default",
+        request.limit,
+        request.rerank,
+        request.paper_id or "all",
+        request.temperature,
+        request.max_tokens,
+    )
+
     t_start = time.perf_counter()
 
-    # Step 1: Vector Search + Cross-Encoder Reranking
+    # ── Step 1: Vector Search + Cross-Encoder Reranking ──────────────────
+    log.debug("[ASK][Step 1] Starting vector search (collection=%s, prefetch=%s, rescore=%s)...",
+              request.collection, request.prefetch_limit, request.rescore)
     t_retrieval = time.perf_counter()
     try:
         hits = search_chunks(
@@ -240,13 +295,38 @@ def ask(request: RagAskRequest):
             rescore=request.rescore,
         )
     except Exception as exc:
+        log.exception("[ASK][Step 1] Vector search/rerank failed: %s", exc)
         raise HTTPException(
             status_code=503,
             detail=f"Vector search/rerank failed: {exc}",
         ) from exc
     retrieval_latency_ms = (time.perf_counter() - t_retrieval) * 1000.0
 
-    # Step 2: Format Sources for response
+    log.info("[ASK][Step 1] ✓ Retrieved %d chunks in %.1f ms", len(hits), retrieval_latency_ms)
+    for idx, hit in enumerate(hits, start=1):
+        payload = hit.payload or {}
+        vec_score = payload.get("vector_score") or hit.score
+        rerank_score = payload.get("rerank_score")
+        log.debug(
+            "[ASK][Chunk %d/%d] chunk_id=%s | paper=%s | page=%s | "
+            "vector_score=%.4f | rerank_score=%s | section=%r",
+            idx,
+            len(hits),
+            payload.get("chunk_id"),
+            payload.get("paper_id"),
+            payload.get("page"),
+            vec_score,
+            f"{rerank_score:.4f}" if rerank_score is not None else "N/A",
+            payload.get("section") or payload.get("subsection"),
+        )
+        log.debug(
+            "[ASK][Chunk %d/%d] text_preview=%r",
+            idx,
+            len(hits),
+            (payload.get("text") or "")[:200],
+        )
+
+    # ── Step 2: Format Sources for response ──────────────────────────────
     sources: list[RagSourceChunk] = []
     for idx, hit in enumerate(hits, start=1):
         payload = hit.payload or {}
@@ -266,7 +346,14 @@ def ask(request: RagAskRequest):
             )
         )
 
-    # Step 3: LLM Generation via Groq
+    # ── Step 3: LLM Generation via Groq ──────────────────────────────────
+    log.debug(
+        "[ASK][Step 3] Sending %d chunks to Groq LLM (model=%s, temp=%.2f, max_tokens=%d)...",
+        len(hits),
+        request.model or "default",
+        request.temperature,
+        request.max_tokens,
+    )
     try:
         generator = GroqGenerator(
             model_name=request.model or None,
@@ -286,12 +373,39 @@ def ask(request: RagAskRequest):
             **kwargs,
         )
     except Exception as exc:
+        log.exception("[ASK][Step 3] Groq LLM generation failed: %s", exc)
         raise HTTPException(
             status_code=502,
             detail=f"Groq LLM generation failed: {exc}",
         ) from exc
 
     total_latency_ms = (time.perf_counter() - t_start) * 1000.0
+
+    # ── Debug: log LLM response ───────────────────────────────────────────
+    usage = gen_result.get("usage", {})
+    log.info(
+        "[ASK][Step 3] ✓ LLM responded in %.1f ms | model=%s | "
+        "prompt_tokens=%s | completion_tokens=%s | total_tokens=%s",
+        gen_result["latency_ms"],
+        gen_result["model"],
+        usage.get("prompt_tokens"),
+        usage.get("completion_tokens"),
+        usage.get("total_tokens"),
+    )
+    log.debug(
+        "[ASK][LLM Answer]\n%s",
+        gen_result["answer"],
+    )
+    if gen_result.get("reasoning"):
+        log.debug("[ASK][LLM Reasoning]\n%s", gen_result["reasoning"])
+
+    log.info(
+        "[ASK] ✓ DONE | retrieval=%.1f ms | generation=%.1f ms | total=%.1f ms",
+        retrieval_latency_ms,
+        gen_result["latency_ms"],
+        total_latency_ms,
+    )
+    log.info("[ASK] ══════════════════════════════════════════════════════════")
 
     return RagAskResponse(
         query=request.query,
@@ -305,3 +419,4 @@ def ask(request: RagAskRequest):
         total_latency_ms=round(total_latency_ms, 2),
         token_usage=gen_result.get("usage", {}),
     )
+

@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 from typing import Any
 
+from api.logger import get_logger
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
@@ -37,6 +39,9 @@ DEFAULT_QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 DEFAULT_COLLECTION = os.getenv("QDRANT_COLLECTION", "research_chunks_jina_v5")
 DEFAULT_VECTOR_SIZE = JINA_EMBEDDING_SIZE
 DEFAULT_RERANK_PREFETCH_LIMIT = int(os.getenv("PREFETCH_LIMIT", "10"))
+
+log = get_logger("src.retrieval.vector_search")
+
 
 
 def load_jsonl(path: str | Path) -> list[dict[str, Any]]:
@@ -172,9 +177,22 @@ def search_chunks(
     reranker_model: str = DEFAULT_RERANKER_MODEL,
     rescore: bool = True,
 ) -> list[Any]:
+    log.debug(
+        "[RETRIEVER] search_chunks | query=%r | collection=%s | limit=%d | "
+        "rerank=%s | paper_id=%s | rescore=%s",
+        query,
+        collection_name,
+        limit,
+        rerank,
+        paper_id or "all",
+        rescore,
+    )
+
     client = build_qdrant_client(qdrant_url=qdrant_url, qdrant_path=qdrant_path, api_key=api_key)
     embedder = JinaEmbedder(batch_size=1)
     query_vector = embedder.embed_query(query)
+
+    log.debug("[RETRIEVER] Query embedded → vector dim=%d", len(query_vector))
 
     query_filter = None
     if paper_id:
@@ -193,6 +211,14 @@ def search_chunks(
     fetch_limit = prefetch_limit or (
         max(limit * 2, DEFAULT_RERANK_PREFETCH_LIMIT) if rerank else limit
     )
+
+    log.debug(
+        "[RETRIEVER] Querying Qdrant | fetch_limit=%d | using=%s | filter=%s",
+        fetch_limit,
+        using_name,
+        "paper_id=" + paper_id if paper_id else "none",
+    )
+
     search_params = SearchParams(
         quantization=QuantizationSearchParams(
             rescore=rescore,
@@ -208,11 +234,40 @@ def search_chunks(
         search_params=search_params,
     ).points
 
+    log.debug("[RETRIEVER] Qdrant returned %d raw candidates", len(points))
+    for idx, pt in enumerate(points, start=1):
+        payload = pt.payload or {}
+        log.debug(
+            "[RETRIEVER][Raw %d/%d] score=%.4f | chunk_id=%s | paper=%s | page=%s | section=%r",
+            idx,
+            len(points),
+            pt.score,
+            payload.get("chunk_id"),
+            payload.get("paper_id"),
+            payload.get("page"),
+            payload.get("section") or payload.get("subsection"),
+        )
+
     if rerank and points:
+        log.debug("[RETRIEVER] Reranking %d candidates with %r (top_n=%d)...", len(points), reranker_model, limit)
         reranker = JinaReranker(model_name=reranker_model)
         points = reranker.rerank(query, points, top_n=limit)
+        log.debug("[RETRIEVER] Reranked → %d results", len(points))
+        for idx, pt in enumerate(points, start=1):
+            payload = pt.payload or {}
+            log.debug(
+                "[RETRIEVER][Reranked %d/%d] rerank_score=%s | vector_score=%s | chunk_id=%s | paper=%s",
+                idx,
+                len(points),
+                f"{payload.get('rerank_score'):.4f}" if payload.get("rerank_score") is not None else "N/A",
+                f"{payload.get('vector_score'):.4f}" if payload.get("vector_score") is not None else f"{pt.score:.4f}",
+                payload.get("chunk_id"),
+                payload.get("paper_id"),
+            )
 
-    return points[:limit]
+    final = points[:limit]
+    log.debug("[RETRIEVER] Returning %d final results", len(final))
+    return final
 
 
 def _parse_path_or_none(value: str | None) -> Path | None:
