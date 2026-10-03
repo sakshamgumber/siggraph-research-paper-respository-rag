@@ -15,6 +15,7 @@ import {
   Tooltip,
   Divider,
   Spin,
+  Drawer,
   message,
 } from "antd";
 import {
@@ -52,14 +53,27 @@ const SUGGESTED_QUERIES = [
   "What does CRF correction change about the correlation between objective metrics and visual quality?",
 ];
 
+// Hook to detect mobile breakpoint
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [config, setConfig] = useState<RagConfig>(DEFAULT_CONFIG);
   const [apiConnected, setApiConnected] = useState<boolean | null>(null);
-  const [siderCollapsed, setSiderCollapsed] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
+  const isMobile = useIsMobile();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<any>(null);
 
@@ -87,6 +101,9 @@ export default function ChatPage() {
   const handleSend = async (queryText?: string) => {
     const textToSend = (queryText || inputValue).trim();
     if (!textToSend || loading) return;
+
+    // Close settings drawer on mobile when sending
+    if (isMobile) setSettingsOpen(false);
 
     const userMessage: ChatMessage = {
       id: `user_${Date.now()}`,
@@ -167,64 +184,189 @@ export default function ChatPage() {
     message.info("Chat history cleared");
   };
 
+  // Shared settings panel content (used in both Sider and Drawer)
+  const SettingsContent = (
+    <Space direction="vertical" size={20} style={{ width: "100%" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <SettingOutlined style={{ color: "#2563eb", fontSize: 16 }} />
+        <Title level={5} style={{ margin: 0 }}>
+          RAG Pipeline Controls
+        </Title>
+      </div>
+
+      {/* Model Selection */}
+      <div>
+        <Text strong style={{ fontSize: 13, display: "block", marginBottom: 6 }}>
+          Groq LLM Model
+        </Text>
+        <Select
+          value={config.model}
+          onChange={(val) => setConfig({ ...config, model: val })}
+          style={{ width: "100%" }}
+          options={[
+            { label: "openai/gpt-oss-120b (High Reasoning)", value: "openai/gpt-oss-120b" },
+            { label: "openai/gpt-oss-20b (Sub-second Speed)", value: "openai/gpt-oss-20b" },
+          ]}
+        />
+      </div>
+
+      {/* Top-K Chunks */}
+      <div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <Text strong style={{ fontSize: 13 }}>Top-K Chunks to Retrieve</Text>
+          <Tag color="blue">{config.limit}</Tag>
+        </div>
+        <Slider
+          min={1}
+          max={15}
+          value={config.limit}
+          onChange={(val) => setConfig({ ...config, limit: val })}
+        />
+        <Text type="secondary" style={{ fontSize: 11 }}>
+          Number of reranked research chunks fed into the LLM context.
+        </Text>
+      </div>
+
+      {/* Reranker Toggle */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <Text strong style={{ fontSize: 13, display: "block" }}>Cross-Encoder Rerank</Text>
+          <Text type="secondary" style={{ fontSize: 11 }}>jina-reranker-m0</Text>
+        </div>
+        <Switch
+          checked={config.rerank}
+          onChange={(checked) => setConfig({ ...config, rerank: checked })}
+        />
+      </div>
+
+      {/* TurboQuant Rescore */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <Text strong style={{ fontSize: 13, display: "block" }}>TurboQuant Rescore</Text>
+          <Text type="secondary" style={{ fontSize: 11 }}>16x PQ exact re-ranking</Text>
+        </div>
+        <Switch
+          checked={config.rescore}
+          onChange={(checked) => setConfig({ ...config, rescore: checked })}
+        />
+      </div>
+
+      {/* Paper ID Filter */}
+      <div>
+        <Text strong style={{ fontSize: 13, display: "block", marginBottom: 6 }}>
+          Paper ID Filter (Optional)
+        </Text>
+        <Input
+          placeholder="e.g. 3528233.3530716"
+          value={config.paper_id || ""}
+          onChange={(e) => setConfig({ ...config, paper_id: e.target.value })}
+          allowClear
+        />
+        <Text type="secondary" style={{ fontSize: 11 }}>
+          Limit search strictly to a specific SIGGRAPH publication.
+        </Text>
+      </div>
+
+      {/* Temperature */}
+      <div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <Text strong style={{ fontSize: 13 }}>Temperature</Text>
+          <Tag>{config.temperature}</Tag>
+        </div>
+        <Slider
+          min={0.0}
+          max={1.0}
+          step={0.1}
+          value={config.temperature}
+          onChange={(val) => setConfig({ ...config, temperature: val })}
+        />
+        <Text type="secondary" style={{ fontSize: 11 }}>
+          Lower temperature produces more strictly grounded answers.
+        </Text>
+      </div>
+
+      <Divider style={{ margin: "10px 0" }} />
+
+      <Card
+        size="small"
+        style={{ background: "#f1f5f9", border: "none", borderRadius: 8 }}
+        styles={{ body: { padding: "12px 14px" } }}
+      >
+        <Space direction="vertical" size={4}>
+          <Text strong style={{ fontSize: 12, color: "#334155" }}>Stack Info</Text>
+          <Text style={{ fontSize: 11, color: "#64748b" }}>• Vector DB: Qdrant Cloud (PQ-16)</Text>
+          <Text style={{ fontSize: 11, color: "#64748b" }}>• Chunks: 81,439 points</Text>
+          <Text style={{ fontSize: 11, color: "#64748b" }}>• Embedding: jina-v5 (1024-d)</Text>
+          <Text style={{ fontSize: 11, color: "#64748b" }}>• LLM Engine: Groq High-Speed</Text>
+        </Space>
+      </Card>
+    </Space>
+  );
+
   return (
     <Layout style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Top Header */}
+      {/* ── Top Header ── */}
       <Header
         style={{
           background: "#ffffff",
           borderBottom: "1px solid #e2e8f0",
-          padding: "0 24px",
+          padding: isMobile ? "0 12px" : "0 24px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: 68,
+          height: isMobile ? 56 : 68,
           lineHeight: "normal",
           zIndex: 10,
+          flexShrink: 0,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        {/* Left — Logo + Title */}
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 8 : 14, minWidth: 0 }}>
           <div
             style={{
-              width: 38,
-              height: 38,
-              minWidth: 38,
+              width: isMobile ? 32 : 38,
+              height: isMobile ? 32 : 38,
+              minWidth: isMobile ? 32 : 38,
               borderRadius: 8,
               background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               color: "#ffffff",
-              fontSize: 18,
+              fontSize: isMobile ? 15 : 18,
               boxShadow: "0 2px 8px rgba(37, 99, 235, 0.3)",
             }}
           >
             <BookOutlined />
           </div>
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, lineHeight: 1.2, marginBottom: 3 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>
-                SIGGRAPH Research Assistant
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, lineHeight: 1.2, marginBottom: 2, flexWrap: "wrap" }}>
+              <span style={{ fontSize: isMobile ? 13 : 16, fontWeight: 700, color: "#0f172a", whiteSpace: "nowrap" }}>
+                {isMobile ? "SIGGRAPH RAG" : "SIGGRAPH Research Assistant"}
               </span>
-              <Tag color="blue" style={{ fontSize: 11, fontWeight: 600, margin: 0, padding: "0 6px", lineHeight: "20px" }}>
-                TurboQuant + Groq
-              </Tag>
+              {!isMobile && (
+                <Tag color="blue" style={{ fontSize: 11, fontWeight: 600, margin: 0, padding: "0 6px", lineHeight: "20px" }}>
+                  TurboQuant + Groq
+                </Tag>
+              )}
             </div>
-            <span style={{ fontSize: 12, color: "#64748b", lineHeight: 1.2 }}>
-              81,439 Paper Chunks • Jina v5 • Cross-Encoder Rerank
-            </span>
+            {!isMobile && (
+              <span style={{ fontSize: 12, color: "#64748b", lineHeight: 1.2 }}>
+                81,439 Paper Chunks • Jina v5 • Cross-Encoder Rerank
+              </span>
+            )}
           </div>
         </div>
 
-        <Space size={14} align="center">
-          {/* Backend Status indicator */}
-          <Tooltip title={apiConnected ? "Backend API Connected (Railway Cloud)" : "Backend Disconnected"}>
+        {/* Right — Actions */}
+        <Space size={isMobile ? 6 : 14} align="center">
+          <Tooltip title={apiConnected ? "Backend API Connected" : "Backend Disconnected"}>
             <Tag
               icon={apiConnected ? <CheckCircleFilled /> : <CloseCircleFilled />}
               color={apiConnected ? "success" : "error"}
-              style={{ padding: "3px 10px", borderRadius: 12, fontSize: 12 }}
+              style={{ padding: isMobile ? "2px 6px" : "3px 10px", borderRadius: 12, fontSize: isMobile ? 11 : 12, margin: 0 }}
             >
-              {apiConnected ? "API Online" : "API Offline"}
+              {isMobile ? (apiConnected ? "Online" : "Offline") : (apiConnected ? "API Online" : "API Offline")}
             </Tag>
           </Tooltip>
 
@@ -232,22 +374,23 @@ export default function ChatPage() {
             icon={<ClearOutlined />}
             onClick={handleClear}
             disabled={messages.length === 0}
-            size="middle"
+            size={isMobile ? "small" : "middle"}
           >
-            Clear
+            {isMobile ? null : "Clear"}
           </Button>
 
           <Button
             icon={<SettingOutlined />}
-            type={siderCollapsed ? "default" : "primary"}
-            onClick={() => setSiderCollapsed(!siderCollapsed)}
-            size="middle"
+            type={settingsOpen ? "primary" : "default"}
+            onClick={() => setSettingsOpen(!settingsOpen)}
+            size={isMobile ? "small" : "middle"}
           >
-            Settings
+            {isMobile ? null : "Settings"}
           </Button>
         </Space>
       </Header>
 
+      {/* ── Body ── */}
       <Layout style={{ flex: 1, overflow: "hidden" }}>
         {/* Main Chat Area */}
         <Content
@@ -259,51 +402,61 @@ export default function ChatPage() {
             overflow: "hidden",
           }}
         >
-          {/* Scrollable Messages Container */}
+          {/* Scrollable Messages */}
           <div
             style={{
               flex: 1,
               overflowY: "auto",
-              padding: "24px 28px",
+              padding: isMobile ? "16px 14px" : "24px 28px",
+              WebkitOverflowScrolling: "touch",
             }}
           >
             {messages.length === 0 ? (
               <div
                 style={{
                   maxWidth: 720,
-                  margin: "40px auto 0",
+                  margin: isMobile ? "16px auto 0" : "40px auto 0",
                   textAlign: "center",
                 }}
               >
                 <div
                   style={{
-                    width: 64,
-                    height: 64,
+                    width: isMobile ? 48 : 64,
+                    height: isMobile ? 48 : 64,
                     borderRadius: "50%",
                     background: "#eff6ff",
                     color: "#2563eb",
-                    fontSize: 28,
+                    fontSize: isMobile ? 20 : 28,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 16px",
+                    margin: "0 auto 12px",
                   }}
                 >
                   <FireOutlined />
                 </div>
-                <Title level={3} style={{ marginBottom: 8, color: "#0f172a" }}>
+                <Title level={isMobile ? 4 : 3} style={{ marginBottom: 8, color: "#0f172a" }}>
                   Ask SIGGRAPH Research Questions
                 </Title>
-                <Paragraph type="secondary" style={{ fontSize: 15, maxWidth: 520, margin: "0 auto 28px" }}>
-                  Grounded technical answers synthesized from 81,439 computer graphics paper chunks with Qdrant TurboQuant vector search, Jina cross-encoder reranking, and Groq LLM inference.
+                <Paragraph
+                  type="secondary"
+                  style={{
+                    fontSize: isMobile ? 13 : 15,
+                    maxWidth: 520,
+                    margin: "0 auto 20px",
+                  }}
+                >
+                  {isMobile
+                    ? "Grounded answers from 81,439 paper chunks with Qdrant, Jina reranking, and Groq LLM."
+                    : "Grounded technical answers synthesized from 81,439 computer graphics paper chunks with Qdrant TurboQuant vector search, Jina cross-encoder reranking, and Groq LLM inference."}
                 </Paragraph>
 
-                {/* Suggestions Grid */}
+                {/* Suggestion Cards */}
                 <div style={{ textAlign: "left" }}>
-                  <Text strong style={{ fontSize: 13, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                  <Text strong style={{ fontSize: 12, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>
                     Suggested Benchmark Queries
                   </Text>
-                  <Space direction="vertical" size={10} style={{ width: "100%", marginTop: 12 }}>
+                  <Space direction="vertical" size={8} style={{ width: "100%", marginTop: 10 }}>
                     {SUGGESTED_QUERIES.map((q, idx) => (
                       <Card
                         key={idx}
@@ -316,11 +469,11 @@ export default function ChatPage() {
                           cursor: "pointer",
                           transition: "all 0.2s",
                         }}
-                        styles={{ body: { padding: "10px 14px" } }}
+                        styles={{ body: { padding: isMobile ? "8px 10px" : "10px 14px" } }}
                       >
                         <Space align="start">
-                          <QuestionCircleOutlined style={{ color: "#2563eb", marginTop: 3 }} />
-                          <Text style={{ fontSize: 13.5, color: "#334155" }}>{q}</Text>
+                          <QuestionCircleOutlined style={{ color: "#2563eb", marginTop: 3, flexShrink: 0 }} />
+                          <Text style={{ fontSize: isMobile ? 12.5 : 13.5, color: "#334155" }}>{q}</Text>
                         </Space>
                       </Card>
                     ))}
@@ -333,19 +486,19 @@ export default function ChatPage() {
                   <ChatMessageItem key={msg.id} message={msg} />
                 ))}
 
-                {/* Thinking / Loading indicator */}
                 {loading && (
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
                     <div
                       style={{
-                        width: 38,
-                        height: 38,
+                        width: 34,
+                        height: 34,
                         borderRadius: "50%",
                         background: "#2563eb",
                         color: "#fff",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        flexShrink: 0,
                       }}
                     >
                       <Spin size="small" />
@@ -356,13 +509,16 @@ export default function ChatPage() {
                         borderRadius: "4px 16px 16px 16px",
                         border: "1px solid #e2e8f0",
                         background: "#ffffff",
+                        flex: 1,
                       }}
-                      styles={{ body: { padding: "12px 18px" } }}
+                      styles={{ body: { padding: "10px 14px" } }}
                     >
                       <Space>
                         <Spin size="small" />
-                        <Text type="secondary" style={{ fontSize: 13 }}>
-                          Searching TurboQuant index, reranking chunks, and synthesizing answer with Groq...
+                        <Text type="secondary" style={{ fontSize: isMobile ? 12 : 13 }}>
+                          {isMobile
+                            ? "Searching and synthesizing..."
+                            : "Searching TurboQuant index, reranking chunks, and synthesizing answer with Groq..."}
                         </Text>
                       </Space>
                     </Card>
@@ -373,26 +529,26 @@ export default function ChatPage() {
             )}
           </div>
 
-          {/* Bottom Chat Input Bar */}
+          {/* ── Bottom Input Bar ── */}
           <div
             style={{
-              padding: "16px 28px 24px",
+              padding: isMobile ? "10px 12px 14px" : "16px 28px 24px",
               background: "#ffffff",
               borderTop: "1px solid #e2e8f0",
+              flexShrink: 0,
             }}
           >
             <div style={{ maxWidth: 960, margin: "0 auto" }}>
               <div
                 style={{
                   display: "flex",
-                  gap: 12,
+                  gap: 8,
                   alignItems: "flex-end",
                   background: "#ffffff",
                   border: "1.5px solid #cbd5e1",
                   borderRadius: 12,
-                  padding: "8px 12px",
-                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.03)",
-                  transition: "border-color 0.2s",
+                  padding: isMobile ? "6px 10px" : "8px 12px",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.03)",
                 }}
               >
                 <TextArea
@@ -400,19 +556,19 @@ export default function ChatPage() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
+                    if (e.key === "Enter" && !e.shiftKey && !isMobile) {
                       e.preventDefault();
                       handleSend();
                     }
                   }}
-                  placeholder="Ask a question about computer graphics papers (e.g. low-poly meshing, NeRF, BRDFs, motion fields)..."
-                  autoSize={{ minRows: 1, maxRows: 5 }}
+                  placeholder={
+                    isMobile
+                      ? "Ask about SIGGRAPH papers..."
+                      : "Ask a question about computer graphics papers (e.g. low-poly meshing, NeRF, BRDFs, motion fields)..."
+                  }
+                  autoSize={{ minRows: 1, maxRows: isMobile ? 4 : 5 }}
                   bordered={false}
-                  style={{
-                    resize: "none",
-                    padding: 0,
-                    fontSize: 14.5,
-                  }}
+                  style={{ resize: "none", padding: 0, fontSize: isMobile ? 14 : 14.5 }}
                   disabled={loading}
                 />
                 <Button
@@ -423,40 +579,50 @@ export default function ChatPage() {
                   disabled={!inputValue.trim()}
                   style={{
                     borderRadius: 8,
-                    height: 38,
-                    padding: "0 18px",
+                    height: isMobile ? 34 : 38,
+                    padding: isMobile ? "0 12px" : "0 18px",
                     fontWeight: 600,
                   }}
                 >
-                  Ask
+                  {isMobile ? null : "Ask"}
                 </Button>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: 8,
-                  fontSize: 12,
-                  color: "#94a3b8",
-                }}
-              >
-                <Space size={12}>
-                  <span>Model: <strong>{config.model}</strong></span>
-                  <span>•</span>
-                  <span>Top-K: <strong>{config.limit}</strong></span>
-                  <span>•</span>
-                  <span>Reranker: <strong>{config.rerank ? "On (jina-reranker-m0)" : "Off"}</strong></span>
-                </Space>
-                <span>Press Enter to send, Shift + Enter for new line</span>
-              </div>
+              {/* Status bar — hidden on mobile to save space */}
+              {!isMobile && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 8,
+                    fontSize: 12,
+                    color: "#94a3b8",
+                  }}
+                >
+                  <Space size={12}>
+                    <span>Model: <strong>{config.model}</strong></span>
+                    <span>•</span>
+                    <span>Top-K: <strong>{config.limit}</strong></span>
+                    <span>•</span>
+                    <span>Reranker: <strong>{config.rerank ? "On (jina-reranker-m0)" : "Off"}</strong></span>
+                  </Space>
+                  <span>Press Enter to send, Shift + Enter for new line</span>
+                </div>
+              )}
+
+              {/* Compact status on mobile */}
+              {isMobile && (
+                <div style={{ marginTop: 6, fontSize: 11, color: "#94a3b8", textAlign: "center" }}>
+                  {config.model.includes("120b") ? "120b" : "20b"} · Top-K {config.limit} · Rerank {config.rerank ? "On" : "Off"}
+                </div>
+              )}
             </div>
           </div>
         </Content>
 
-        {/* Collapsible Settings Sider */}
-        {!siderCollapsed && (
+        {/* ── Desktop: fixed right Sider ── */}
+        {!isMobile && settingsOpen && (
           <Sider
             width={310}
             theme="light"
@@ -466,148 +632,27 @@ export default function ChatPage() {
               overflowY: "auto",
             }}
           >
-            <Space direction="vertical" size={20} style={{ width: "100%" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <SettingOutlined style={{ color: "#2563eb", fontSize: 16 }} />
-                <Title level={5} style={{ margin: 0 }}>
-                  RAG Pipeline Controls
-                </Title>
-              </div>
-
-              {/* Model Selection */}
-              <div>
-                <Text strong style={{ fontSize: 13, display: "block", marginBottom: 6 }}>
-                  Groq LLM Model
-                </Text>
-                <Select
-                  value={config.model}
-                  onChange={(val) => setConfig({ ...config, model: val })}
-                  style={{ width: "100%" }}
-                  options={[
-                    {
-                      label: "openai/gpt-oss-120b (High Reasoning)",
-                      value: "openai/gpt-oss-120b",
-                    },
-                    {
-                      label: "openai/gpt-oss-20b (Sub-second Speed)",
-                      value: "openai/gpt-oss-20b",
-                    },
-                  ]}
-                />
-              </div>
-
-              {/* Top-K Chunks */}
-              <div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                  <Text strong style={{ fontSize: 13 }}>Top-K Chunks to Retrieve</Text>
-                  <Tag color="blue">{config.limit}</Tag>
-                </div>
-                <Slider
-                  min={1}
-                  max={15}
-                  value={config.limit}
-                  onChange={(val) => setConfig({ ...config, limit: val })}
-                />
-                <Text type="secondary" style={{ fontSize: 11 }}>
-                  Number of reranked research chunks fed into the LLM context.
-                </Text>
-              </div>
-
-              {/* Reranker Toggle */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div>
-                  <Text strong style={{ fontSize: 13, display: "block" }}>
-                    Cross-Encoder Rerank
-                  </Text>
-                  <Text type="secondary" style={{ fontSize: 11 }}>
-                    jina-reranker-m0
-                  </Text>
-                </div>
-                <Switch
-                  checked={config.rerank}
-                  onChange={(checked) => setConfig({ ...config, rerank: checked })}
-                />
-              </div>
-
-              {/* TurboQuant Rescore */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div>
-                  <Text strong style={{ fontSize: 13, display: "block" }}>
-                    TurboQuant Rescore
-                  </Text>
-                  <Text type="secondary" style={{ fontSize: 11 }}>
-                    16x PQ exact re-ranking
-                  </Text>
-                </div>
-                <Switch
-                  checked={config.rescore}
-                  onChange={(checked) => setConfig({ ...config, rescore: checked })}
-                />
-              </div>
-
-              {/* Paper ID Filter */}
-              <div>
-                <Text strong style={{ fontSize: 13, display: "block", marginBottom: 6 }}>
-                  Paper ID Filter (Optional)
-                </Text>
-                <Input
-                  placeholder="e.g. 3528233.3530716"
-                  value={config.paper_id || ""}
-                  onChange={(e) => setConfig({ ...config, paper_id: e.target.value })}
-                  allowClear
-                />
-                <Text type="secondary" style={{ fontSize: 11 }}>
-                  Limit search strictly to a specific SIGGRAPH publication.
-                </Text>
-              </div>
-
-              {/* Temperature */}
-              <div>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                  <Text strong style={{ fontSize: 13 }}>Temperature</Text>
-                  <Tag>{config.temperature}</Tag>
-                </div>
-                <Slider
-                  min={0.0}
-                  max={1.0}
-                  step={0.1}
-                  value={config.temperature}
-                  onChange={(val) => setConfig({ ...config, temperature: val })}
-                />
-                <Text type="secondary" style={{ fontSize: 11 }}>
-                  Lower temperature produces more strictly grounded answers.
-                </Text>
-              </div>
-
-              <Divider style={{ margin: "10px 0" }} />
-
-              <Card
-                size="small"
-                style={{ background: "#f1f5f9", border: "none", borderRadius: 8 }}
-                styles={{ body: { padding: "12px 14px" } }}
-              >
-                <Space direction="vertical" size={4}>
-                  <Text strong style={{ fontSize: 12, color: "#334155" }}>
-                    Stack Info
-                  </Text>
-                  <Text style={{ fontSize: 11, color: "#64748b" }}>
-                    • Vector DB: Qdrant Cloud (PQ-16)
-                  </Text>
-                  <Text style={{ fontSize: 11, color: "#64748b" }}>
-                    • Chunks: 81,439 points
-                  </Text>
-                  <Text style={{ fontSize: 11, color: "#64748b" }}>
-                    • Embedding: jina-v5 (1024-d)
-                  </Text>
-                  <Text style={{ fontSize: 11, color: "#64748b" }}>
-                    • LLM Engine: Groq High-Speed
-                  </Text>
-                </Space>
-              </Card>
-            </Space>
+            {SettingsContent}
           </Sider>
         )}
       </Layout>
+
+      {/* ── Mobile: bottom Drawer for settings ── */}
+      {isMobile && (
+        <Drawer
+          title="RAG Pipeline Controls"
+          placement="bottom"
+          open={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+          height="80vh"
+          styles={{
+            body: { padding: "16px 18px", overflowY: "auto", WebkitOverflowScrolling: "touch" },
+            header: { padding: "14px 18px" },
+          }}
+        >
+          {SettingsContent}
+        </Drawer>
+      )}
     </Layout>
   );
 }

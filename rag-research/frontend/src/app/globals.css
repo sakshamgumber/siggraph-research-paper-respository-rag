@@ -142,3 +142,49 @@ body {
 .thinking-pulse {
   animation: pulseGlow 1.5s infinite ease-in-out;
 }
+
+/* ── Mobile responsive overrides ───────────────────────────── */
+@media (max-width: 768px) {
+  /* Prevent iOS bounce/overscroll on the outer body */
+  html, body {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
+  /* Ensure inner scrollable containers work on iOS */
+  .ant-layout-content,
+  .ant-drawer-body {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Make markdown tables scrollable horizontally on small screens */
+  .markdown-body table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  /* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */
+  .ant-input,
+  .ant-select-selector,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Compact markdown on mobile */
+  .markdown-body {
+    font-size: 13.5px;
+  }
+
+  /* Touch-friendly sliders */
+  .ant-slider {
+    touch-action: none;
+  }
+
+  /* Ensure drawer sits above everything */
+  .ant-drawer {
+    z-index: 1050;
+  }
+}
