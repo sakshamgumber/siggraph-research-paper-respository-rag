@@ -8,7 +8,6 @@ import {
   Button,
   Space,
   Tag,
-  Badge,
   Card,
   Slider,
   Switch,
@@ -16,13 +15,10 @@ import {
   Tooltip,
   Divider,
   Spin,
-  Alert,
-  Empty,
   message,
 } from "antd";
 import {
   SendOutlined,
-  ThunderboltOutlined,
   SettingOutlined,
   ClearOutlined,
   BookOutlined,
@@ -30,7 +26,6 @@ import {
   CheckCircleFilled,
   CloseCircleFilled,
   FireOutlined,
-  ExperimentOutlined,
 } from "@ant-design/icons";
 import { ChatMessage, RagConfig, SourceChunk } from "../types/chat";
 import { ChatMessageItem } from "../components/ChatMessageItem";
@@ -72,7 +67,7 @@ export default function ChatPage() {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://reasonable-amazement-production-8284.up.railway.app";
         const res = await fetch(`${apiUrl}/health`);
         setApiConnected(res.ok);
       } catch (err) {
@@ -104,7 +99,7 @@ export default function ChatPage() {
     setInputValue("");
     setLoading(true);
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://reasonable-amazement-production-8284.up.railway.app";
 
     try {
       const payload: Record<string, any> = {
@@ -155,7 +150,7 @@ export default function ChatPage() {
       const errorMessage: ChatMessage = {
         id: `error_${Date.now()}`,
         role: "assistant",
-        content: `**Error generating response:**\n${err.message || "Failed to connect to RAG backend. Make sure the FastAPI server is running on port 8000."}`,
+        content: `**Error generating response:**\n${err.message || "Failed to connect to RAG backend. Make sure the backend server is reachable."}`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         isError: true,
       };
@@ -223,7 +218,7 @@ export default function ChatPage() {
 
         <Space size={14} align="center">
           {/* Backend Status indicator */}
-          <Tooltip title={apiConnected ? "Backend API Connected (port 8000)" : "Backend Disconnected"}>
+          <Tooltip title={apiConnected ? "Backend API Connected (Railway Cloud)" : "Backend Disconnected"}>
             <Tag
               icon={apiConnected ? <CheckCircleFilled /> : <CloseCircleFilled />}
               color={apiConnected ? "success" : "error"}

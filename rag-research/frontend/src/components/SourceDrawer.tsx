@@ -3,7 +3,6 @@
 import React from "react";
 import { Drawer, Card, Tag, Typography, Space, Divider, Empty } from "antd";
 import {
-  FileTextOutlined,
   ThunderboltOutlined,
   AimOutlined,
   BookOutlined,
